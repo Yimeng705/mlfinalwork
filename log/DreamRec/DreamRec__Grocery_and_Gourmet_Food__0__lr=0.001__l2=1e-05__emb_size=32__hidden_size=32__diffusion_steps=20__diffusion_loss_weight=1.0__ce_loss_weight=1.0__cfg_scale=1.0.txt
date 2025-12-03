@@ -1,0 +1,180 @@
+INFO:root:Namespace(model_name='DreamRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-02 17:15:27 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 128                 
+ ce_loss_weight        | 1.0                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 20                  
+ dropout               | 0.1                 
+ early_stop            | 10                  
+ emb_size              | 32                  
+ epoch                 | 3                   
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 32                  
+ history_max           | 20                  
+ l2                    | 1e-05               
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ rescale_timesteps     | False               
+ save_final_results    | 1                   
+ schedule_sampler_name | uniform             
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food/SeqReader.pkl
+INFO:root:#params: 329088
+INFO:root:DreamRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 32, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+  (net): Diffu_xstart(
+    (time_embed): Sequential(
+      (0): Linear(in_features=32, out_features=128, bias=True)
+      (1): SiLU()
+      (2): Linear(in_features=128, out_features=32, bias=True)
+    )
+    (norm_diffu_rep): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+    (mlp): Sequential(
+      (0): Linear(in_features=96, out_features=128, bias=True)
+      (1): SiLU()
+      (2): Dropout(p=0.1, inplace=False)
+      (3): Linear(in_features=128, out_features=32, bias=True)
+      (4): Linear(in_features=32, out_features=128, bias=True)
+      (5): SiLU()
+      (6): Dropout(p=0.1, inplace=False)
+      (7): Linear(in_features=128, out_features=32, bias=True)
+    )
+    (dropout): Dropout(p=0.1, inplace=False)
+  )
+  (ag_encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0): Sequential(
+        (0): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (1): Linear(in_features=32, out_features=128, bias=True)
+        (2): SiLU()
+        (3): Dropout(p=0.1, inplace=False)
+        (4): Linear(in_features=128, out_features=32, bias=True)
+        (5): Dropout(p=0.1, inplace=False)
+      )
+      (1): Sequential(
+        (0): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (1): Linear(in_features=32, out_features=128, bias=True)
+        (2): SiLU()
+        (3): Dropout(p=0.1, inplace=False)
+        (4): Linear(in_features=128, out_features=32, bias=True)
+        (5): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0477,NDCG@5:0.0278,HR@10:0.0918,NDCG@10:0.0418,HR@20:0.1868,NDCG@20:0.0653,HR@50:0.5054,NDCG@50:0.1275)
+INFO:root:Optimizer: Adam
+INFO:root:Namespace(model_name='DreamRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-03 19:43:45 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 128                 
+ ce_loss_weight        | 1.0                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 20                  
+ dropout               | 0.1                 
+ early_stop            | 10                  
+ emb_size              | 32                  
+ epoch                 | 3                   
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 32                  
+ history_max           | 20                  
+ l2                    | 1e-05               
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ rescale_timesteps     | False               
+ save_final_results    | 1                   
+ schedule_sampler_name | uniform             
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food/SeqReader.pkl
+INFO:root:#params: 329088
+INFO:root:DreamRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 32, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+  (net): Diffu_xstart(
+    (time_embed): Sequential(
+      (0): Linear(in_features=32, out_features=128, bias=True)
+      (1): SiLU()
+      (2): Linear(in_features=128, out_features=32, bias=True)
+    )
+    (norm_diffu_rep): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+    (mlp): Sequential(
+      (0): Linear(in_features=96, out_features=128, bias=True)
+      (1): SiLU()
+      (2): Dropout(p=0.1, inplace=False)
+      (3): Linear(in_features=128, out_features=32, bias=True)
+      (4): Linear(in_features=32, out_features=128, bias=True)
+      (5): SiLU()
+      (6): Dropout(p=0.1, inplace=False)
+      (7): Linear(in_features=128, out_features=32, bias=True)
+    )
+    (dropout): Dropout(p=0.1, inplace=False)
+  )
+  (ag_encoder): TransformerEncoder(
+    (layers): ModuleList(
+      (0): Sequential(
+        (0): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (1): Linear(in_features=32, out_features=128, bias=True)
+        (2): SiLU()
+        (3): Dropout(p=0.1, inplace=False)
+        (4): Linear(in_features=128, out_features=32, bias=True)
+        (5): Dropout(p=0.1, inplace=False)
+      )
+      (1): Sequential(
+        (0): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+        (1): Linear(in_features=32, out_features=128, bias=True)
+        (2): SiLU()
+        (3): Dropout(p=0.1, inplace=False)
+        (4): Linear(in_features=128, out_features=32, bias=True)
+        (5): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0477,NDCG@5:0.0278,HR@10:0.0918,NDCG@10:0.0418,HR@20:0.1868,NDCG@20:0.0653,HR@50:0.5054,NDCG@50:0.1275)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5027 [25.3 s]	dev=(HR@5:0.2460,NDCG@5:0.1607) [32.7 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-03 19:46:00 ---------------------------------------------

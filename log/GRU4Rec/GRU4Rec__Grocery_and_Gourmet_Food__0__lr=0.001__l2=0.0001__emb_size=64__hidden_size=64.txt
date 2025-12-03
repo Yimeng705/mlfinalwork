@@ -1,0 +1,45 @@
+INFO:root:Namespace(model_name='GRU4Rec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-02 15:09:38 ---------------------------------------------
+INFO:root:
+===========================================
+ Arguments          | Values               
+===========================================
+ batch_size         | 256                 
+ data_appendix      |                     
+ dataset            | Grocery_and_Gourm...
+ dropout            | 0                   
+ early_stop         | 10                  
+ emb_size           | 64                  
+ epoch              | 200                 
+ eval_batch_size    | 256                 
+ gpu                | 0                   
+ hidden_size        | 64                  
+ history_max        | 50                  
+ l2                 | 0.0001              
+ lr                 | 0.001               
+ main_metric        |                     
+ num_neg            | 1                   
+ num_workers        | 5                   
+ optimizer          | Adam                
+ random_seed        | 0                   
+ save_final_results | 1                   
+ test_all           | 0                   
+ topk               | 5,10,20,50          
+===========================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food/SeqReader.pkl
+INFO:root:#params: 586816
+INFO:root:GRU4Rec(
+  (i_embeddings): Embedding(8714, 64)
+  (rnn): GRU(64, 64, batch_first=True)
+  (out): Linear(in_features=64, out_features=64, bias=True)
+)
+INFO:root:Test Before Training: (HR@5:0.0452,NDCG@5:0.0248,HR@10:0.0966,NDCG@10:0.0412,HR@20:0.1971,NDCG@20:0.0664,HR@50:0.5007,NDCG@50:0.1252)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.4893 [23.4 s]	dev=(HR@5:0.2420,NDCG@5:0.1553) [3.2 s] *
+INFO:root:Epoch 2     loss=0.4316 [21.6 s]	dev=(HR@5:0.2937,NDCG@5:0.1963) [3.7 s] *
+INFO:root:Epoch 3     loss=0.4019 [22.4 s]	dev=(HR@5:0.3263,NDCG@5:0.2166) [3.1 s] *
+INFO:root:Epoch 4     loss=0.3833 [21.7 s]	dev=(HR@5:0.3361,NDCG@5:0.2258) [4.5 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-02 15:11:54 ---------------------------------------------
