@@ -1,0 +1,28 @@
+# 1 模型对比
+python src/main.py --model_name SASRec --emb_size 128 --hidden_size 128 --num_layers 2 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --epoch 100 --dataset Grocery_and_Gourmet_Food
+python src/main.py --model_name GRU4Rec --emb_size 128 --hidden_size 128 --num_layers 2 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --epoch 100 --dataset Grocery_and_Gourmet_Food
+python src/main.py --model_name DreamRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100 --dataset Grocery_and_Gourmet_Food
+python src/main.py --model_name DiffuRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100 --dataset Grocery_and_Gourmet_Food
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1 --dataset Grocery_and_Gourmet_Food
+
+python src/main.py --model_name SASRec --emb_size 128 --hidden_size 128 --num_layers 2 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --epoch 100 --dataset MovieLens_1M
+python src/main.py --model_name GRU4Rec --emb_size 128 --hidden_size 128 --num_layers 2 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --epoch 100 --dataset MovieLens_1M
+python src/main.py --model_name DreamRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100 --dataset MovieLens_1M
+python src/main.py --model_name DiffuRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100 --dataset MovieLens_1M
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1 --dataset MovieLens_1M
+
+# 2 扩散模型对比
+python src/main.py --model_name DreamRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100
+python src/main.py --model_name DiffuRec --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --epoch 100
+
+# 3 消融实验
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1 --training_stage stage3
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1 --independent_diffusion 0
+
+# 4 超参数实验
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 5 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 10 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 20 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1
+python src/main.py --model_name ADRec --early_stop 30 --emb_size 128 --hidden_size 128 --diffusion_steps 50 --num_blocks 4 --num_heads 4 --dropout 0.3 --lr 5e-4 --l2 1e-5 --diffusion_loss_weight 0.7 --ce_loss_weight 0.3 --cfg_scale 1.2 --epoch 100 --use_partial_generation 1

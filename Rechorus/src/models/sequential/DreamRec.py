@@ -113,8 +113,6 @@ class DreamRecBase(object):
                           help='Weight for diffusion MSE loss.')
         parser.add_argument('--ce_loss_weight', type=float, default=1.0,
                           help='Weight for cross-entropy loss.')
-        parser.add_argument('--dropout', type=float, default=0.1,
-                          help='Dropout rate.')
         return parser
 
     def _base_init(self, args, corpus):

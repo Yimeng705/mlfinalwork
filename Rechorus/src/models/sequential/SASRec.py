@@ -73,7 +73,7 @@ class SASRecBase(object):
 			his_vectors = block(his_vectors, attn_mask)
 		his_vectors = his_vectors * valid_his[:, :, None].float()
 
-		his_vector = his_vectors[torch.arange(batch_size), lengths - 1, :]
+		his_vector = his_vectors[torch.arange(batch_size), (lengths - 1).long(), :]
 		# his_vector = his_vectors.sum(1) / lengths[:, None].float()
 		# ↑ average pooling is shown to be more effective than the most recent embedding
 

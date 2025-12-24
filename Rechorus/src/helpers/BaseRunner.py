@@ -173,6 +173,8 @@ class BaseRunner(object):
 
 	def fit(self, dataset: BaseModel.Dataset, epoch=-1) -> float:
 		model = dataset.model
+		if hasattr(model, 'set_current_epoch'):
+			model.set_current_epoch(epoch)
 		if model.optimizer is None:
 			model.optimizer = self._build_optimizer(model)
 		dataset.actions_before_epoch()  # must sample before multi thread start

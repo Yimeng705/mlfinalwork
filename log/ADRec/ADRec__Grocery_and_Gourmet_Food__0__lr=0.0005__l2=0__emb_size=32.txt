@@ -1,0 +1,111 @@
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-21 18:54:10 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 64                  
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 10                  
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 32                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ independent_diffusion | False               
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.0005              
+ main_metric           |                     
+ noise_schedule        | cosine              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ pretrain_epochs       | 10                  
+ random_seed           | 0                   
+ rescale_timesteps     | False               
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+ training_stage        | stage1              
+ warmup_epochs         | 5                   
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 283104
+INFO:root:ADRec(
+  (projection): Linear(in_features=64, out_features=32, bias=True)
+  (emb_projection): Linear(in_features=32, out_features=64, bias=True)
+  (i_embeddings): Embedding(8714, 32)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((32,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): TransformerEncoder(
+        (layers): ModuleList(
+          (0): Sequential(
+            (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+            (1): Linear(in_features=64, out_features=256, bias=True)
+            (2): SiLU()
+            (3): Dropout(p=0.1, inplace=False)
+            (4): Linear(in_features=256, out_features=64, bias=True)
+            (5): Dropout(p=0.1, inplace=False)
+          )
+          (1): Sequential(
+            (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+            (1): Linear(in_features=64, out_features=256, bias=True)
+            (2): SiLU()
+            (3): Dropout(p=0.1, inplace=False)
+            (4): Linear(in_features=256, out_features=64, bias=True)
+            (5): Dropout(p=0.1, inplace=False)
+          )
+        )
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0489,NDCG@5:0.0279,HR@10:0.1061,NDCG@10:0.0461,HR@20:0.2142,NDCG@20:0.0732,HR@50:0.5130,NDCG@50:0.1316)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.4971 [42.6 s]	dev=(HR@5:0.2415,NDCG@5:0.1600) [32.1 s] *
+INFO:root:Epoch 2     loss=0.4358 [49.3 s]	dev=(HR@5:0.2555,NDCG@5:0.1706) [31.9 s] *
+INFO:root:Epoch 3     loss=0.4069 [41.4 s]	dev=(HR@5:0.2588,NDCG@5:0.1741) [31.7 s] *
+INFO:root:Epoch 4     loss=0.3909 [49.4 s]	dev=(HR@5:0.2610,NDCG@5:0.1749) [32.1 s] *
+INFO:root:Epoch 5     loss=0.3774 [41.4 s]	dev=(HR@5:0.2559,NDCG@5:0.1732) [32.1 s] *
+INFO:root:Epoch 6     loss=0.3648 [53.6 s]	dev=(HR@5:0.2541,NDCG@5:0.1694) [50.5 s] *
+INFO:root:Epoch 7     loss=0.3561 [86.4 s]	dev=(HR@5:0.2537,NDCG@5:0.1712) [37.2 s] *
+INFO:root:Early stop manually

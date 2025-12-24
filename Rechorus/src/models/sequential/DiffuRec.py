@@ -116,8 +116,6 @@ class DiffuRecBase(object):
                           help='Weight for diffusion MSE loss.')
         parser.add_argument('--ce_loss_weight', type=float, default=1.0,
                           help='Weight for cross-entropy loss.')
-        parser.add_argument('--dropout', type=float, default=0.1,
-                          help='Dropout rate.')
         parser.add_argument('--independent', action='store_true',
                           help='Whether to use independent diffusion.')
         return parser

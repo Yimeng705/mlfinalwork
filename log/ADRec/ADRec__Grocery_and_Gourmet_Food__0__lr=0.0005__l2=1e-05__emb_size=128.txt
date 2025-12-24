@@ -1,0 +1,146 @@
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-20 16:17:08 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 0.3                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.5                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 0.7                 
+ diffusion_steps       | 50                  
+ dropout               | 0.3                 
+ early_stop            | 20                  
+ emb_size              | 128                 
+ epoch                 | 100                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 128                 
+ history_max           | 20                  
+ independent_diffusion | False               
+ l2                    | 1e-05               
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.0005              
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_blocks            | 4                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ pretrain_epochs       | 10                  
+ random_seed           | 0                   
+ rescale_timesteps     | False               
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+ training_stage        | stage1              
+ warmup_epochs         | 5                   
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 1115648
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8714, 128)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): TransformerEncoder(
+        (layers): ModuleList(
+          (0): Sequential(
+            (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+            (1): Linear(in_features=128, out_features=512, bias=True)
+            (2): SiLU()
+            (3): Dropout(p=0.1, inplace=False)
+            (4): Linear(in_features=512, out_features=128, bias=True)
+            (5): Dropout(p=0.1, inplace=False)
+          )
+          (1): Sequential(
+            (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+            (1): Linear(in_features=128, out_features=512, bias=True)
+            (2): SiLU()
+            (3): Dropout(p=0.1, inplace=False)
+            (4): Linear(in_features=512, out_features=128, bias=True)
+            (5): Dropout(p=0.1, inplace=False)
+          )
+        )
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=128, out_features=512, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=512, out_features=128, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0.3, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0.3, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0.3, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0.3, inplace=False)
+        )
+        (2): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0.3, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0.3, inplace=False)
+        )
+        (3): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0.3, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0.3, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0503,NDCG@5:0.0297,HR@10:0.0964,NDCG@10:0.0444,HR@20:0.1973,NDCG@20:0.0696,HR@50:0.5009,NDCG@50:0.1289)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5521 [76.2 s]	dev=(HR@5:0.2346,NDCG@5:0.1530) [290.1 s] *
+INFO:root:Epoch 2     loss=0.3603 [80.9 s]	dev=(HR@5:0.2593,NDCG@5:0.1748) [398.0 s] *
+INFO:root:Epoch 3     loss=0.2607 [99.3 s]	dev=(HR@5:0.2664,NDCG@5:0.1843) [338.0 s] *
+INFO:root:Epoch 4     loss=0.1929 [84.8 s]	dev=(HR@5:0.2646,NDCG@5:0.1849) [314.7 s] *
+INFO:root:Epoch 5     loss=0.1454 [82.9 s]	dev=(HR@5:0.2630,NDCG@5:0.1827) [294.7 s] *
+INFO:root:Epoch 6     loss=0.1132 [82.5 s]	dev=(HR@5:0.2676,NDCG@5:0.1860) [323.7 s] *
+INFO:root:Epoch 7     loss=0.0921 [87.1 s]	dev=(HR@5:0.2667,NDCG@5:0.1857) [324.9 s] *
+INFO:root:Epoch 8     loss=0.0767 [81.3 s]	dev=(HR@5:0.2635,NDCG@5:0.1815) [314.3 s] *
+INFO:root:Epoch 9     loss=0.0656 [84.0 s]	dev=(HR@5:0.2597,NDCG@5:0.1795) [271.9 s] *
+INFO:root:Epoch 10    loss=0.0584 [76.9 s]	dev=(HR@5:0.2580,NDCG@5:0.1803) [262.2 s] *
+INFO:root:Epoch 11    loss=0.0505 [76.9 s]	dev=(HR@5:0.2577,NDCG@5:0.1794) [268.3 s] *
+INFO:root:Epoch 12    loss=0.0462 [81.7 s]	dev=(HR@5:0.2663,NDCG@5:0.1824) [279.5 s] *
+INFO:root:Epoch 13    loss=0.0429 [78.3 s]	dev=(HR@5:0.2605,NDCG@5:0.1794) [279.0 s] *
+INFO:root:Epoch 14    loss=0.0397 [80.5 s]	dev=(HR@5:0.2661,NDCG@5:0.1808) [279.2 s] *
+INFO:root:Epoch 15    loss=0.0379 [89.4 s]	dev=(HR@5:0.2627,NDCG@5:0.1790) [332.5 s] *
+INFO:root:Epoch 16    loss=0.0356 [83.9 s]	dev=(HR@5:0.2638,NDCG@5:0.1803) [324.3 s] *
+INFO:root:Epoch 17    loss=0.0342 [83.5 s]	dev=(HR@5:0.2635,NDCG@5:0.1791) [329.7 s] *
+INFO:root:Epoch 18    loss=0.0329 [84.7 s]	dev=(HR@5:0.2650,NDCG@5:0.1806) [341.0 s] *
+INFO:root:Epoch 19    loss=0.0307 [87.5 s]	dev=(HR@5:0.2627,NDCG@5:0.1790) [316.4 s] *
+INFO:root:Epoch 20    loss=0.0307 [86.1 s]	dev=(HR@5:0.2619,NDCG@5:0.1787) [335.2 s] *
+INFO:root:Epoch 21    loss=0.0285 [114.0 s]	dev=(HR@5:0.2670,NDCG@5:0.1805) [327.5 s] *
+INFO:root:Epoch 22    loss=0.0277 [87.9 s]	dev=(HR@5:0.2685,NDCG@5:0.1842) [288.1 s] *
+INFO:root:Epoch 23    loss=0.0273 [83.9 s]	dev=(HR@5:0.2696,NDCG@5:0.1832) [409.2 s] *
+INFO:root:Epoch 24    loss=0.0272 [118.6 s]	dev=(HR@5:0.2746,NDCG@5:0.1851) [430.1 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-20 19:07:35 ---------------------------------------------

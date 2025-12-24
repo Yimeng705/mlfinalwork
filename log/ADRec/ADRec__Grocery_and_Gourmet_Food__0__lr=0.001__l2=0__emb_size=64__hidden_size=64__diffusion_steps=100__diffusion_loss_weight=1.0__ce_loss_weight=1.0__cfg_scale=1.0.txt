@@ -1,0 +1,438 @@
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-09 23:33:59 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 100                 
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 64                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Reading data from "data/", dataset = "Grocery_and_Gourmet_Food" 
+INFO:root:Counting dataset statistics...
+INFO:root:"# user": 14681, "# item": 8713, "# entry": 151254
+INFO:root:Appending history info...
+INFO:root:Save corpus to data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 690624
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 64, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+        (3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-11 18:08:30 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 100                 
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 64                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | cosine              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 690624
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 64, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+        (3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:1.0000,NDCG@5:inf,HR@10:1.0000,NDCG@10:inf,HR@20:1.0000,NDCG@20:inf,HR@50:1.0000,NDCG@50:inf)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5041 [36.5 s]	dev=(HR@5:1.0000,NDCG@5:inf) [75.5 s] *
+INFO:root:Epoch 2     loss=0.4451 [36.0 s]	dev=(HR@5:1.0000,NDCG@5:inf) [80.8 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-11 18:14:55 ---------------------------------------------
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-11 19:11:22 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 100                 
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 64                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | cosine              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 690624
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 64, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+        (3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:1.0000,NDCG@5:inf,HR@10:1.0000,NDCG@10:inf,HR@20:1.0000,NDCG@20:inf,HR@50:1.0000,NDCG@50:inf)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5041 [52.2 s]	dev=(HR@5:1.0000,NDCG@5:inf) [122.9 s] *
+INFO:root:Epoch 2     loss=0.4451 [54.7 s]	dev=(HR@5:1.0000,NDCG@5:inf) [84.1 s] *
+INFO:root:Epoch 3     loss=0.4273 [51.7 s]	dev=(HR@5:1.0000,NDCG@5:inf) [151.0 s] *
+INFO:root:Epoch 4     loss=0.4178 [52.8 s]	dev=(HR@5:1.0000,NDCG@5:inf) [115.4 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-11 19:26:36 ---------------------------------------------
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-11 21:48:53 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 100                 
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 64                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | cosine              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 690624
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 64, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+        (3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:1.0000,NDCG@5:inf,HR@10:1.0000,NDCG@10:inf,HR@20:1.0000,NDCG@20:inf,HR@50:1.0000,NDCG@50:inf)
+INFO:root:Optimizer: Adam
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-11 21:52:34 ---------------------------------------------
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-11 22:25:39 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 1.0                 
+ diffusion_steps       | 100                 
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 64                  
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 64                  
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | cosine              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 690560
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8714, 64)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+        (3): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=64, out_features=256, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=256, out_features=64, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=64, out_features=256, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=256, out_features=64, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0483,NDCG@5:0.0280,HR@10:0.0977,NDCG@10:0.0438,HR@20:0.2001,NDCG@20:0.0693,HR@50:0.5006,NDCG@50:0.1280)
+INFO:root:Optimizer: Adam
+INFO:root:Early stop manually

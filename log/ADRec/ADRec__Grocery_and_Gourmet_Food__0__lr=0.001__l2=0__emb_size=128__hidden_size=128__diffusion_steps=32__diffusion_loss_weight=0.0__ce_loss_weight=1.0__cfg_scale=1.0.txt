@@ -1,0 +1,188 @@
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-09 23:36:11 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 0.0                 
+ diffusion_steps       | 32                  
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 128                 
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 128                 
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 1643392
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 128, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=128, out_features=512, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=512, out_features=128, bias=True)
+        (3): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=128, out_features=512, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=512, out_features=128, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0512,NDCG@5:0.0300,HR@10:0.0969,NDCG@10:0.0446,HR@20:0.1913,NDCG@20:0.0681,HR@50:0.4996,NDCG@50:0.1284)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5041 [64.9 s]	dev=(HR@5:0.2536,NDCG@5:0.1664) [63.7 s] *
+INFO:root:Epoch 2     loss=0.4450 [89.4 s]	dev=(HR@5:0.2582,NDCG@5:0.1701) [63.6 s] *
+INFO:root:Epoch 3     loss=0.4273 [89.8 s]	dev=(HR@5:0.2586,NDCG@5:0.1715) [64.1 s] *
+INFO:root:Epoch 4     loss=0.4164 [91.7 s]	dev=(HR@5:0.2612,NDCG@5:0.1712) [63.6 s]
+INFO:root:Epoch 5     loss=0.4076 [88.5 s]	dev=(HR@5:0.2609,NDCG@5:0.1712) [61.5 s]
+INFO:root:Epoch 6     loss=0.4005 [89.8 s]	dev=(HR@5:0.2627,NDCG@5:0.1721) [63.1 s] *
+INFO:root:Epoch 7     loss=0.3968 [90.9 s]	dev=(HR@5:0.2629,NDCG@5:0.1735) [64.3 s] *
+INFO:root:Epoch 8     loss=0.3950 [87.3 s]	dev=(HR@5:0.2597,NDCG@5:0.1715) [63.0 s]
+INFO:root:Epoch 9     loss=0.3911 [85.1 s]	dev=(HR@5:0.2590,NDCG@5:0.1700) [64.3 s]
+INFO:root:Epoch 10    loss=0.3894 [66.6 s]	dev=(HR@5:0.2638,NDCG@5:0.1733) [51.2 s]
+INFO:root:Epoch 11    loss=0.3880 [72.7 s]	dev=(HR@5:0.2656,NDCG@5:0.1743) [61.5 s] *
+INFO:root:Namespace(model_name='ADRec', model_mode='')
+INFO:root:--------------------------------------------- BEGIN: 2025-12-10 00:06:15 ---------------------------------------------
+INFO:root:
+==============================================
+ Arguments             | Values               
+==============================================
+ batch_size            | 256                 
+ ce_loss_weight        | 1.0                 
+ cfg_dropout_rate      | 0.1                 
+ cfg_scale             | 1.0                 
+ data_appendix         |                     
+ dataset               | Grocery_and_Gourm...
+ diffusion_loss_weight | 0.0                 
+ diffusion_steps       | 32                  
+ dropout               | 0                   
+ early_stop            | 10                  
+ emb_size              | 128                 
+ epoch                 | 200                 
+ eval_batch_size       | 256                 
+ gpu                   | 0                   
+ hidden_size           | 128                 
+ history_max           | 20                  
+ l2                    | 0                   
+ lambda_uncertainty    | 0.001               
+ lr                    | 0.001               
+ main_metric           |                     
+ noise_schedule        | linear              
+ num_blocks            | 2                   
+ num_neg               | 1                   
+ num_workers           | 5                   
+ optimizer             | Adam                
+ random_seed           | 0                   
+ save_final_results    | 1                   
+ test_all              | 0                   
+ topk                  | 5,10,20,50          
+==============================================
+INFO:root:Device: cpu
+INFO:root:Load corpus from data/Grocery_and_Gourmet_Food\SeqReader.pkl
+INFO:root:#params: 1643392
+INFO:root:ADRec(
+  (projection): Identity()
+  (emb_projection): Identity()
+  (i_embeddings): Embedding(8715, 128, padding_idx=0)
+  (embed_dropout): Dropout(p=0.2, inplace=False)
+  (hist_norm): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+  (diffusion): DiffusionModule(
+    (denoise_net): DenoisedModel(
+      (decoder): Sequential(
+        (0): Linear(in_features=128, out_features=512, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=512, out_features=128, bias=True)
+        (3): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+      )
+      (time_embed): Sequential(
+        (0): Linear(in_features=128, out_features=512, bias=True)
+        (1): SiLU()
+        (2): Linear(in_features=512, out_features=128, bias=True)
+      )
+    )
+    (condition_encoder): TransformerEncoder(
+      (layers): ModuleList(
+        (0): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+        (1): Sequential(
+          (0): LayerNorm((128,), eps=1e-05, elementwise_affine=True)
+          (1): Linear(in_features=128, out_features=512, bias=True)
+          (2): SiLU()
+          (3): Dropout(p=0, inplace=False)
+          (4): Linear(in_features=512, out_features=128, bias=True)
+          (5): Dropout(p=0, inplace=False)
+        )
+      )
+    )
+  )
+  (ce_loss): CrossEntropyLoss()
+)
+INFO:root:Test Before Training: (HR@5:0.0512,NDCG@5:0.0300,HR@10:0.0969,NDCG@10:0.0446,HR@20:0.1913,NDCG@20:0.0681,HR@50:0.4996,NDCG@50:0.1284)
+INFO:root:Optimizer: Adam
+INFO:root:Epoch 1     loss=0.5041 [63.7 s]	dev=(HR@5:0.2536,NDCG@5:0.1664) [63.8 s] *
+INFO:root:Epoch 2     loss=0.4450 [89.9 s]	dev=(HR@5:0.2582,NDCG@5:0.1701) [65.4 s] *
+INFO:root:Epoch 3     loss=0.4273 [72.1 s]	dev=(HR@5:0.2586,NDCG@5:0.1715) [52.4 s] *
+INFO:root:Epoch 4     loss=0.4164 [63.4 s]	dev=(HR@5:0.2612,NDCG@5:0.1712) [50.8 s]
+INFO:root:Epoch 5     loss=0.4076 [63.6 s]	dev=(HR@5:0.2609,NDCG@5:0.1712) [52.4 s]
+INFO:root:Epoch 6     loss=0.4005 [63.9 s]	dev=(HR@5:0.2627,NDCG@5:0.1721) [50.5 s] *
+INFO:root:Early stop manually
+INFO:root:
+--------------------------------------------- END: 2025-12-10 00:20:11 ---------------------------------------------

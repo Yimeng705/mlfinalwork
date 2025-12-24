@@ -179,10 +179,11 @@ if __name__ == '__main__':
 										args.include_situation_features)
 
 	# Logging configuration
+	# Logging configuration
 	log_args = [init_args.model_name+init_args.model_mode, args.dataset+args.data_appendix, str(args.random_seed)]
 	for arg in ['lr', 'l2'] + model_name.extra_log_args:
 		log_args.append(arg + '=' + str(eval('args.' + arg)))
-	log_file_name = '__'.join(log_args).replace(' ', '__')
+	log_file_name = '__'.join(log_args[:6]).replace(' ', '__')  # 只取前6个参数
 	if args.log_file == '':
 		args.log_file = '../log/{}/{}.txt'.format(init_args.model_name+init_args.model_mode, log_file_name)
 	if args.model_path == '':
