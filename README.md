@@ -15,6 +15,7 @@ ADRec 是一种基于扩散模型的序列推荐算法，发表于 KDD'2025 会�
 
 ## 文件结构
 
+```bash
 ADRec/                          # 原始论文作者源代码  
 log/                            # 日志文件  
 model/                          # 模型文件
@@ -28,6 +29,7 @@ Rechorus/                       # ReChorus 框架
 │           └── DreamRec.py     # DreamRec 模型实现（复现版本）,用于对比的扩散模型基线
 ├── exp.sh                      # 实验运行脚本
 README.md                   # 本说明文件
+```
 
 ## ADRec 核心创新点
 
@@ -92,6 +94,7 @@ python src/main.py --model_name ADRec --independent_diffusion 0
 
 ### 原始论文引用
 
+```bash
 bibtex
 @inproceedings{chen2025unlocking,
   title={Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach},
@@ -99,9 +102,11 @@ bibtex
   booktitle={Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
   year={2025}
 }
+```
 
 ### ReChorus 框架引用
 
+```bash
 bibtex
 @inproceedings{li2024rechorus2,
   title={ReChorus2. 0: A Modular and Task-Flexible Recommendation Library},
@@ -110,11 +115,12 @@ bibtex
   pages={454--464},
   year={2024}
 }
+```
 
 ### 参考仓库
 
 复现工作主要参考了以下仓库：
-[ADRec 参考仓库](https://github.com/Nemo-1024/ADRec)
-[ReChorus 参考仓库](https://github.com/THUwangcy/Rechorus)
-[DiffuRec 参考仓库](https://github.com/WHUIR/DiffuRec)
+[ADRec 参考仓库](https://github.com/Nemo-1024/ADRec);
+[ReChorus 参考仓库](https://github.com/THUwangcy/Rechorus);
+[DiffuRec 参考仓库](https://github.com/WHUIR/DiffuRec);
 [DreamRec 参考仓库](https://github.com/YangZhengyi98/DreamRec)
