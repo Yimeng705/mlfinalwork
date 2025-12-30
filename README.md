@@ -21,8 +21,10 @@ log/                            # 日志文件
 model/                          # 模型文件
 Rechorus/                       # ReChorus 框架
 ├── logs/
-│   └── models/
+│   └── results/
 │       └── xxx_results.txt     # 训练日志 
+│   └── picture/
+│       └── xxx.png             # 结果可视化图片 
 ├── src/
 │   ├── main.py                 # 主程序入口
 │   └── models/

@@ -35,7 +35,7 @@ ADRec (自回归扩散推荐) 模型实现（代码注释版）
       避免序列级扩散污染历史条件。
 
 额外实现细节：
-    - 引入数值稳定性检查（NaN/Inf 保护）、梯度裁剪点位（如训练框架中调用）
+    - 引入数值稳定性检查（NaN/Inf 保护）；
       以及动态训练阶段调度器（根据 epoch 切换冻结/解冻策略）。
 
 参考：
@@ -606,7 +606,6 @@ class ADRecBase(object):
         self.apply(self.init_weights)
         
         # 根据初始训练阶段设置参数（会冻结/解冻对应模块权重）
-        # 注意：梯度裁剪等优化策略应在训练循环中实现，这里仅控制 requires_grad
         self.set_training_stage(self.training_stage)
 
     def init_weights(self, module):
