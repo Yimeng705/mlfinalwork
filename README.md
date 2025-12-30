@@ -20,6 +20,9 @@ ADRec/                          # 原始论文作者源代码
 log/                            # 日志文件  
 model/                          # 模型文件
 Rechorus/                       # ReChorus 框架
+├── logs/
+│   └── models/
+│       └── xxx_results.txt     # 训练日志 
 ├── src/
 │   ├── main.py                 # 主程序入口
 │   └── models/
