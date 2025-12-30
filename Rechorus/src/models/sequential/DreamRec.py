@@ -1,3 +1,14 @@
+# -*- coding: UTF-8 -*-
+# @Author  : Yijie Gu
+# @Email   : guyj25@mail2.sysu.edu.cn
+
+# @article{yang2023generate,
+#   title={Generate What You Prefer: Reshaping Sequential Recommendation via Guided Diffusion},
+#   author={Yang, Zhengyi and Wu, Jiancan and Wang, Zhicai and Wang, Xiang and Yuan, Yancheng and He, Xiangnan},
+#   journal={Advances in Neural Information Processing Systems},
+#   year={2023}
+# }
+
 import torch.nn as nn
 import torch as th
 import numpy as np

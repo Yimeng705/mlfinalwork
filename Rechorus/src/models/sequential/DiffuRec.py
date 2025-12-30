@@ -1,3 +1,21 @@
+# -*- coding: UTF-8 -*-
+# @Author  : Yijie Gu
+# @Email   : guyj25@mail2.sysu.edu.cn
+
+# @article{10.1145/3631116,
+# author = {Li, Zihao and Sun, Aixin and Li, Chenliang},
+# title = {DiffuRec: A Diffusion Model for Sequential Recommendation},
+# year = {2023},
+# issue_date = {May 2024},
+# publisher = {Association for Computing Machinery},
+# address = {New York, NY, USA},
+# volume = {42},
+# number = {3},
+# issn = {1046-8188},
+# doi = {10.1145/3631116},
+# journal = {ACM Trans. Inf. Syst.},
+# }
+
 import torch.nn as nn
 import torch as th
 import numpy as np

@@ -2,6 +2,15 @@
 # @Author  : Yijie Gu
 # @Email   : guyj25@mail2.sysu.edu.cn
 
+# @inproceedings{JLchen2025ADRec,
+# 	title={Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach},
+# 	author={Jialei Chen and Yuanbo Xu and Yiheng Jiang},
+# 	booktitle={Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)},
+# 	year={2025},
+# 	organization={ACM},
+# 	doi = {10.1145/3711896.3737172}
+# }
+
 """ ADRec (Auto-regressive Diffusion Recommendation)
 Reference:
     "Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach"
