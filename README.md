@@ -59,6 +59,7 @@ README.md                   # 本说明文件
 ### 基本训练命令
 
 ```bash
+cd ReChorus
 python src/main.py --model_name ADRec [参数...]
 ```
 
