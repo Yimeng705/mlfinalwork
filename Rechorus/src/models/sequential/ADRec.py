@@ -11,10 +11,36 @@
 # 	doi = {10.1145/3711896.3737172}
 # }
 
-""" ADRec (Auto-regressive Diffusion Recommendation)
-Reference:
+"""
+ADRec (自回归扩散推荐) 模型实现（代码注释版）
+
+简介 ：
+    ADRec 旨在解决扩散模型在序列推荐中常见的嵌入崩溃问题。其核心思想是
+    将自回归序列建模（用于保持历史语义与顺序信息）与细粒度的 token 级
+    独立扩散过程深度融合。模型由两个核心模块组成：因果注意力模块（CAM）
+    与自回归扩散模块（ADM）。CAM 使用带因果掩码的 Transformer 编码历史序列，
+    为扩散去噪网络提供稳定的条件（条件上下文不被噪声污染）。ADM 负责
+    token 级噪声注入与去噪学习；对长度为 L 的目标序列，每个 token 可以独立
+    采样不同的扩散时间步 t，使每个物品在多种噪声强度下参与训练，从而丰富
+    表征分布的学习能力。
+
+主要实现要点：
+    - 前向扩散遵循标准 DDPM 公式：x_t = sqrt(alpha_cumprod_t) * x_0 + sqrt(1 - alpha_cumprod_t) * eps
+    - 去噪网络以条件信息（CAM 编码）、加噪目标与时间嵌入作为输入进行预测。
+    - 训练采用三阶段策略：
+        1) 阶段1（stage1）：仅用交叉熵（CE）预训练嵌入与 CAM，初始化语义空间。
+        2) 阶段2（stage2）：冻结嵌入层，仅用 MSE 去噪损失训练 ADM 使扩散主干对齐嵌入空间。
+        3) 阶段3（stage3）：解冻全部参数，联合加权 CE 与 MSE 进行微调。
+    - 推理时仅对最后一个待预测 token 执行完整反向扩散；历史 token 保持干净，
+      避免序列级扩散污染历史条件。
+
+额外实现细节：
+    - 引入数值稳定性检查（NaN/Inf 保护）、梯度裁剪点位（如训练框架中调用）
+      以及动态训练阶段调度器（根据 epoch 切换冻结/解冻策略）。
+
+参考：
     "Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach"
-    Chen et al., KDD'2025.
+    Chen et al., KDD 2025.
 """
 
 import math
@@ -31,6 +57,16 @@ class SiLU(nn.Module):
         return x * torch.sigmoid(x)
 
 class TransformerEncoder(nn.Module):
+    """简单的 Transformer 编码器实现（用于 CAM 或通用的前馈块）
+
+    参数说明：
+        hidden_size: 隐藏维度
+        num_blocks: 前馈层数量（注意本实现是残差前馈块的堆叠，简化版Transformer）
+        causal: 是否启用因果语义（CAM 使用 causal=True 以保证因果遮盖）
+    用途：
+        - 当作为 CAM（condition encoder）时，设置 causal=True，以隐式学习序列顺序依赖，
+          不使用显式的位置编码以避免扩散噪声对固定位置编码的破坏。
+    """
     def __init__(self, hidden_size=64, num_blocks=2, dropout=0.1, causal=False):
         super().__init__()
         self.hidden_size = hidden_size
@@ -57,6 +93,14 @@ class TransformerEncoder(nn.Module):
         return out
 
 class DenoisedModel(nn.Module):
+    """去噪网络（ADM 的核心去噪子网）
+
+    实现要点：
+        - 接收条件表示 `rep_item`（来自 CAM）、加噪的目标表示 `x_t` 与时间步 t 的时间嵌入。
+        - 使用小系数 `lambda_uncertainty` 将噪声/时间信息注入到条件中，减弱噪声对条件的直接影响。
+        - 支持两种网络：TransformerEncoder（更强表达）或简单前馈网络（轻量）。
+        - 提供 `forward_cfg` 用于分类无条件引导（Classifier-Free Guidance）实现。
+    """
     def __init__(self, hidden_size=64, lambda_uncertainty=1e-3, use_transformer=True):
         super().__init__()
         self.hidden_size = hidden_size
@@ -79,6 +123,11 @@ class DenoisedModel(nn.Module):
         self.lambda_uncertainty = lambda_uncertainty
 
     def timestep_embedding(self, timesteps, dim, max_period=10000):
+        """时间步嵌入（sin/cos 形式）
+
+        说明：将标量时间步映射到与隐藏维相同的向量空间，用作去噪网络的时间条件。
+        rescale 在外部由 _scale_timesteps 控制。
+        """
         half = dim // 2
         freqs = torch.exp(-math.log(max_period) * torch.arange(0, half, dtype=torch.float32, device=timesteps.device) / half)
         args_ = timesteps.unsqueeze(-1).float() * freqs[None]
@@ -87,34 +136,50 @@ class DenoisedModel(nn.Module):
 
     def forward_cfg(self, c, x_t, t, mask_seq, mask_tgt, cfg_scale=1.0):
         """Classifier-Free Guidance"""
+        # 先计算带条件和无条件两种预测，再按比例组合以实现CFG
         cond_eps = self.forward(c, x_t, t, mask_seq, mask_tgt)
         uncond_eps = self.forward(c, x_t, t, mask_seq, mask_tgt, condition=False)
         eps = uncond_eps + cfg_scale * (cond_eps - uncond_eps)
         return eps
 
     def forward(self, rep_item, x_t, t, mask_seq=None, mask_tgt=None, condition=True):
+        # 如果 condition=False，则进行“无条件”去噪（用于 CFG 的无条件分支）
         if not condition:
             rep_item = torch.zeros_like(rep_item)
-            
+
+        # 保证时间步为二维形状以便批次/序列广播
         t = t.reshape(x_t.shape[0], -1)
         time_emb = self.time_embed(self.timestep_embedding(t, self.hidden_size))
         if time_emb.dim() == 2 and x_t.dim() == 3:
             time_emb = time_emb.unsqueeze(1)
-        
+
+        # 将条件表示、加噪表示与时间嵌入按小权重合并，λ 控制时间/噪声对条件的影响强度
         rep_diffu = rep_item + self.lambda_uncertainty * (x_t + time_emb)
-        
+
+        # 通过解码器（Transformer 或 MLP）进行去噪预测
         if isinstance(self.decoder, TransformerEncoder):
             out = self.decoder(rep_diffu, mask_seq)
         else:
             out = self.decoder(rep_diffu)
-        
+
+        # 数值保护：若出现 NaN 用 0 填充（训练中会有额外的稳定性检查）
         if torch.isnan(out).any():
             out = torch.where(torch.isnan(out), torch.zeros_like(out), out)
-        
+
         return out
 
 class DiffusionModule(nn.Module):
-    """封装扩散过程的核心模块 - 支持token-level独立扩散"""
+    """封装扩散过程的核心模块 - 支持 token-level 独立扩散。
+
+    说明：
+        - 负责噪声调度（beta/alpha）、前向扩散 q(x_t|x_0)、后验近似以及基于去噪网络的
+          反向采样 p(x_{t-1}|x_t)。
+        - 支持两种扩散粒度：
+            * token-level independent diffusion（每个 token 可采样不同 t）
+            * sequence-level diffusion（整个序列共享 t）
+        - 提供 `compute_loss`（训练时的 MSE 去噪损失）与 `generate_last_token`（推理时仅对末位 token 反向去噪）
+        - 包含多处数值稳定性保护（clamp、NaN 检查、最小方差下限等）。
+    """
     def __init__(self, args):
         super().__init__()
         self.hidden_size = args.hidden_size
@@ -144,7 +209,15 @@ class DiffusionModule(nn.Module):
         self.rescale_timesteps = getattr(args, 'rescale_timesteps', False)
         
     def setup_schedule(self, args):
-        """设置噪声调度"""
+        """设置噪声调度（beta schedule）并计算相关系数。
+
+        说明：alphas_cumprod 与 sqrt_one_minus_alphas_cumprod 等张量用于实现标准
+        DDPM 前向扩散与后验公式（见论文公式）：
+            x_t = sqrt(alpha_cumprod_t) * x_0 + sqrt(1 - alpha_cumprod_t) * eps
+
+        这里对 cosine / linear 两类调度都做了支持，并对 posterior_variance 做下界截断
+        以避免数值问题（例如 log(0)）。结果均以 buffer 注册，便于分布式训练与保存。
+        """
         schedule_name = getattr(args, 'noise_schedule', 'linear')
         
         if schedule_name == "linear":
@@ -227,7 +300,17 @@ class DiffusionModule(nn.Module):
         return t
     
     def q_sample(self, x_start, t, noise=None, mask=None):
-        """前向扩散过程：添加噪声 - 支持token-level独立扩散"""
+        """前向扩散：按照时间步 t 向 x_start 添加高斯噪声，返回 x_t。
+
+        对应 DDPM 前向过程（论文公式）：
+            x_t = sqrt(alphas_cumprod_t) * x_0 + sqrt(1 - alphas_cumprod_t) * noise
+
+        参数：
+            x_start: 原始干净嵌入 x_0
+            t: 每个样本（或每个 token）对应的时间步（可为 [B] 或 [B, L]）
+            noise: 可选的噪声张量，默认为标准正态
+            mask: 可选的掩码（0 表示 pad/无效），在 pad 位置不进行噪声注入
+        """
         if noise is None:
             noise = torch.randn_like(x_start)
         
@@ -266,7 +349,7 @@ class DiffusionModule(nn.Module):
         if torch.isnan(x_start_pred).any():
             x_start_pred = torch.where(torch.isnan(x_start_pred), torch.randn_like(x_start_pred) * 0.01, x_start_pred)
         
-        # 计算后验均值
+        # 计算后验均值（模型对 x_0 的预测经过后验公式得到 p(x_{t-1}|x_t) 的均值）
         model_mean = self.q_posterior_mean_variance(x_start_pred, x_t, t)
         
         # 使用固定的后验方差（添加微小值避免log(0)）
@@ -282,7 +365,7 @@ class DiffusionModule(nn.Module):
         
         noise = torch.randn_like(x_t)
         
-        # 非零掩码：当t==0时不添加噪声
+        # 非零掩码：当 t==0 时不再添加随机噪声（因为已到最末步）
         if t.dim() == 2:
             # token-level: t形状为[batch_size, seq_len]
             nonzero_mask = (t != 0).float().unsqueeze(-1)
@@ -302,7 +385,15 @@ class DiffusionModule(nn.Module):
         return sample
     
     def compute_loss(self, condition_emb, target_emb, mask):
-        """计算扩散损失 - 支持token-level独立扩散和加权MSE损失"""
+        """计算扩散损失（MSE 去噪损失）- 支持 token-level 独立扩散和加权损失。
+
+        过程说明：
+                - 若为 token-level 模式（independent_diffusion=True），每个 token 独立采样时间步 t
+                    并展平为一维 batch 进行去噪预测；这样可以让同一序列内不同 token 在不同噪声强度下
+                    学习去噪能力，从而提升生成多样性和鲁棒性。
+                - 若为 sequence-level 模式，则整个序列共享同一时间步。
+                - 使用加权 MSE：对不同长度序列做归一化权重，防止长序列主导损失。
+        """
         batch_size, seq_len, hidden_size = condition_emb.shape
         
         # 编码条件信息
@@ -374,7 +465,13 @@ class DiffusionModule(nn.Module):
         return mse_loss, predicted
     
     def generate_last_token(self, condition_emb, mask):
-        """推理时只对最后一个token进行去噪（论文关键创新）"""
+        """推理时只对最后一个 token 进行去噪（论文关键创新）
+
+        说明：为了避免序列级扩散污染历史条件（历史 token 被噪声破坏），推理阶段仅对
+        末位 token 从纯高斯噪声开始迭代去噪，历史 token 直接作为条件馈入 CAM/ADM。
+        该操作保留了历史序列的干净语义，且生成效果与序列级扩散相比更稳定，但需要 T 步
+        迭代（推理延迟较高）。
+        """
         batch_size, seq_len, hidden_size = condition_emb.shape
         
         # 编码条件信息
@@ -466,11 +563,15 @@ class ADRecBase(object):
         return parser
 
     def _base_init(self, args, corpus):
+        # 基本配置：嵌入维度、隐藏维度与历史长度等
         self.emb_size = args.emb_size
         self.hidden_size = args.hidden_size
         self.max_his = args.history_max
         
-        # 三阶段训练控制
+        # 三阶段训练控制（用于实现论文中的预训练/对齐/微调流程）
+        # stage1: 预训练嵌入与 CAM（CE loss）
+        # stage2: 冻结嵌入，仅训练扩散主干（MSE 去噪）
+        # stage3: 解冻全部参数，联合优化（CE + MSE）
         self.training_stage = getattr(args, 'training_stage', 'stage1')
         self.warmup_epochs = getattr(args, 'warmup_epochs', 5)
         self.pretrain_epochs = getattr(args, 'pretrain_epochs', 10)
@@ -497,14 +598,15 @@ class ADRecBase(object):
         # 扩散模块
         self.diffusion = DiffusionModule(args)
         
-        # 损失函数
+        # 损失函数与权重
         self.ce_loss = nn.CrossEntropyLoss()
         self.diffusion_loss_weight = getattr(args, 'diffusion_loss_weight', 1.0)
         self.ce_loss_weight = getattr(args, 'ce_loss_weight', 1.0)
         
         self.apply(self.init_weights)
         
-        # 根据初始训练阶段设置参数
+        # 根据初始训练阶段设置参数（会冻结/解冻对应模块权重）
+        # 注意：梯度裁剪等优化策略应在训练循环中实现，这里仅控制 requires_grad
         self.set_training_stage(self.training_stage)
 
     def init_weights(self, module):
@@ -520,7 +622,7 @@ class ADRecBase(object):
             module.weight.data.fill_(1.0)
     
     def set_training_stage(self, stage):
-        """设置训练阶段 - 适配您的训练框架"""
+        """设置训练阶段 - 适配训练框架"""
         self.training_stage = stage
         
         if stage == 'stage1':
